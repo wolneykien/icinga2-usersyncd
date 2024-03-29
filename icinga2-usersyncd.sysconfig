@@ -1,0 +1,11 @@
+[api]
+url = https://localhost:5665
+certificate = /etc/ssl/certs/myhostname.crt
+key = /etc/ssl/private/myhostname.key
+#user = root
+#password = 
+ca_certificate = /var/lib/icinga2/ca/ca.crt
+
+[daemon]
+queue = icinga2-usersyncd
+zone = master

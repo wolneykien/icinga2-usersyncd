@@ -1,0 +1,41 @@
+[project]
+name = 'icinga2_usersyncd'
+version = '0.1.0'
+authors = [
+  { name='Paul Wolneykien', email='manowar@altlinux.org' },
+]
+description = 'A daemon to synchronize ApiUser entries with Host agents on an Icinga 2 instance'
+requires-python = ">=3.7"
+keywords = ["icinga", "icinga2"]
+license = { text='GPL-2.0-or-later' }
+classifiers = [
+    "Topic :: System :: Monitoring",
+    "Topic :: System :: Networking :: Monitoring",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    'icinga2api',
+]
+readme = "README.md"
+
+[project.urls]
+repository = 'http://git.altlinux.org/people/manowar/packages/icinga2-usersyncd.git'
+"Bug Tracker" = 'https://bugzilla.altlinux.org/'
+
+[build-system]
+requires = ["setuptools>=65", "setuptools_scm[toml]>=7"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+
+[tool.setuptools.package-data]
+"*" = ["**.conf", "**.sysconfig", "**.service"]
+
+[project.scripts]
+icinga2-usersyncd = "icinga2_usersyncd.cli:main"
+
+[tool.pytest.ini_options]
+#minversion = "6.0"
+#testpaths = [
+#    "test",
+#]
