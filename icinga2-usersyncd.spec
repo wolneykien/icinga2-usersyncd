@@ -31,9 +31,6 @@ Icinga 2 instance.
 %install
 %pyproject_install
 
-#%check
-#%pyproject_run_pytest
-
 %files
 %python3_sitelibdir_noarch/%rname
 %python3_sitelibdir_noarch/%rname-%version.dist-info
