@@ -3,8 +3,8 @@
 
 class Daemon:
     def __init__(self):
+        pass
 
-#
 # from icinga2apic.client import Client
 #
 # client = Client(config_file='/etc/sysconfig/icinga2-apiusers-sync')

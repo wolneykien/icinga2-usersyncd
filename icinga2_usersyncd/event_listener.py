@@ -1,6 +1,6 @@
 # This file is a part of the icinga2_usersyncd Python package.
 #
-# Copyright (C) 2022  Paul Wolneykien <manowar@altlinux.org>
+# Copyright (C) 2024  Paul Wolneykien <manowar@altlinux.org>
 #
 # This file is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -99,7 +99,7 @@ class EventListener():
         """
 
         self.client = Client(
-            config_file = config_file
+            config_file = config_file,
             url = url,
             username = username,
             password = password,
