@@ -1,5 +1,5 @@
 %define _unpackaged_files_terminate_build 1
-%define rname icinga2_usersyncd
+%define rname icinga2-usersyncd
 
 Name: python3-module-%rname
 Version: 0.1.0
