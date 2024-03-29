@@ -14,7 +14,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
-    'icinga2api',
+    'icinga2apic',
 ]
 readme = "README.md"
 
