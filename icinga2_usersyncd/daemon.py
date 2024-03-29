@@ -1,18 +1,25 @@
-from icinga2apic.client import Client
+# from importlib.resources import files
+#
 
-client = Client(config_file='/etc/sysconfig/icinga2-apiusers-sync')
+class Daemon:
+    def __init__(self):
 
-client.objects.list('Host',
-                    filters='host.zone == zone',
-                    filter_vars={'zone': zone})
-
-types = ['ObjectCreated', 'ObjectDeleted']
-queue = queue
-filter = 'event.object_type == "Host"'
-
-for event in client.events.subscribe(types, queue, filter):
-    print(event)
-
+#
+# from icinga2apic.client import Client
+#
+# client = Client(config_file='/etc/sysconfig/icinga2-apiusers-sync')
+#
+# client.objects.list('Host',
+#                     filters='host.zone == zone',
+#                     filter_vars={'zone': zone})
+#
+# types = ['ObjectCreated', 'ObjectDeleted']
+# queue = queue
+# filter = 'event.object_type == "Host"'
+#
+# for event in client.events.subscribe(types, queue, filter):
+#     print(event)
+#
 #{"object_name":"test1","object_type":"Host","timestamp":1711707986.404245,"type":"ObjectCreated"}
 
 ## curl -k -sS -i -u 'root:bcf6ca38a4d66d17' -H 'Accept: application/json' -X POST 'https://localhost:5665/v1/events' -d '{ "queue": "abc", "types": ["ObjectCreated", "ObjectDeleted"], "filter": "event.object_type == \"Host\"" }'
