@@ -1,7 +1,7 @@
 %define _unpackaged_files_terminate_build 1
-%define rname icinga2-usersyncd
+%define oname icinga2_usersyncd
 
-Name: python3-module-%rname
+Name: icinga2-usersyncd
 Version: 0.1.0
 Release: alt1
 
@@ -18,9 +18,19 @@ BuildRequires(pre): rpm-build-python3
 BuildRequires: python3(setuptools) python3(wheel) python3(pytest)
 BuildRequires: python3(icinga2apic)
 
+Requires: python3-module-%name = %version-%release
+
 %description
 A daemon to synchronize ApiUser entries with Host agents on an
 Icinga 2 instance.
+
+%package -n python3-module-%name
+Group: Development/Python3
+Summary: Python module for a daemon to synchronize ApiUser entries with Host agents on an Icinga 2 instance
+
+%description -n python3-module-%name
+Python module for a daemon to synchronize ApiUser entries with Host
+agents on an Icinga 2 instance.
 
 %prep
 %setup
@@ -31,8 +41,21 @@ Icinga 2 instance.
 %install
 %pyproject_install
 
+mkdir -p %buildroot%_sysconfdir/icinga2/conf.d
+mv -v %buildroot%python3_sitelibdir_noarch/%oname/%name.conf \
+      %buildroot%_sysconfdir/icinga2/conf.d/%name.conf
+
+mkdir -p %buildroot%_sysconfdir/sysconfig
+mv -v %buildroot%python3_sitelibdir_noarch/%oname/%name.sysconfig \
+      %buildroot%_sysconfdir/sysconfig/%name
+
 %files
-%python3_sitelibdir_noarch/%rname
-%python3_sitelibdir_noarch/%rname-%version.dist-info
+%_bindir/%name
+%config(noreplace) %_sysconfdir/icinga2/conf.d/%name.conf
+%config(noreplace) %_sysconfdir/sysconfig/%name
+
+%files -n python3-module-%name
+%python3_sitelibdir_noarch/%oname
+%python3_sitelibdir_noarch/%oname-%version.dist-info
 
 %changelog
