@@ -26,8 +26,8 @@ remove calls.
 """
 
 from typing import Optional
-
-from icinga2apic.client import Client
+from icinga2apic.client import Client # type: ignore
+from threading import Lock
 
 import logging
 logger = logging.getLogger(__name__)
@@ -40,52 +40,10 @@ class EventListener():
     """
 
     def __init__(self,
-                 config_file: Optional[str] = None,
-                 url: Optional[str] = None,
-                 username: Optional[str] = None,
-                 password: Optional[str] = None,
-                 certificate: Optional[str] = None,
-                 key: Optional[str] = None,
-                 ca_certificate: Optional[str] = None,
+                 client: Client,
                  queue: Optional[str] = None,
                  filter: Optional[str] = None):
         """
-        :param config_file: A path to configuration file, usually
-            /etc/sysconfig/icinga2-usersyncd with ``[api]`` and
-            ``[daemon]`` sections, which defines connection parameters
-            for ``icinga2apic.client`` and an optional filter for Host
-            objects.
-
-        :param url: The Icinga 2 API URL to connect to. The default
-            is https://localhost:5665/. If specified, overrides the
-            value specified in the configuration file under the
-            ``[api]`` section.
-
-        :param username: An optional username for BASIC authentication
-            on the Icinga 2 API. If specified, overrides the value
-            specified in the configuration file under the ``[api]``
-            section.
-
-        :param username: An optional password for BASIC authentication
-            on the Icinga 2 API. If specified, overrides the value
-            specified in the configuration file under the ``[api]``
-            section.
-
-        :param certificate: An optional path to the user certificate
-            for authentication on the Icinga 2 API. If specified,
-            overrides the value specified in the configuration file
-            under the ``[api]`` section.
-
-        :param key: A path to the private key for user certificate.
-            Required if certificate is not None. If specified,
-            overrides the value specified in the configuration file
-            under the ``[api]`` section.
-
-        :param ca_certificate: The Icinga 2 CA certificate used to
-            verify the API connection. If specified, overrides the
-            value specified in the configuration file under the
-            ``[api]`` section.
-
         :param queue: An optional queue name value to be used with
             the Icinga 2 event API. The default value is
             ``icinga2-usersyncd``. If specified, overrides the
@@ -97,29 +55,33 @@ class EventListener():
             value specified in the configuration file under the
             ``[daemon]`` section.
         """
-
-        self.client = Client(
-            config_file = config_file,
-            url = url,
-            username = username,
-            password = password,
-            certificate = certificate,
-            key = certificate,
-            ca_certificate = ca_certificate
-        )
+        self.client = client
+        self.queue = queue or "icinga2-usersyncd"
+        self.filter = filter
+        self.stream = None
 
     def run(self):
         """
-        Run the listener.
+        Runs the listener.
         """
 
-        for e in self.client.events.subscribe(
-                ['ObjectCreated', 'ObjectDeleted'],
-                self.queue,
-                self.filter
-        ):
-            pass
+        logger.info("Requesting host create and delete events...")
+        self.stream = self.client.events.subscribe(
+            ['ObjectCreated', 'ObjectDeleted'],
+            self.queue,
+            self.filter
+        )
 
+        for e in self.stream:
+            print(e)
+
+    def stop(self):
+        """
+        Terminates the event listener.
+        """
+
+        if self.stream:
+            self.stream.close()
 
 # client.objects.list('Host',
 #                     filters='host.zone == zone',
