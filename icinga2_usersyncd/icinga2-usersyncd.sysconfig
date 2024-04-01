@@ -2,7 +2,7 @@
 url = https://localhost:5665
 certificate = /etc/ssl/certs/myhostname.crt
 key = /etc/ssl/private/myhostname.key
-#user = root
+#username = root
 #password = 
 ca_certificate = /var/lib/icinga2/ca/ca.crt
 
