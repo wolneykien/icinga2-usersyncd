@@ -25,7 +25,7 @@ events and translates them into corresponding ApiUser add and
 remove calls.
 """
 
-from typing import Optional
+from typing import Optional, Generator
 from icinga2apic.client import Client # type: ignore
 from threading import Lock
 
@@ -55,33 +55,44 @@ class EventListener():
             value specified in the configuration file under the
             ``[daemon]`` section.
         """
+
         self.client = client
         self.queue = queue or "icinga2-usersyncd"
         self.filter = filter
-        self.stream = None
+        self.stream: Optional[Generator] = None
+        self.lock = Lock()
 
-    def run(self):
+    def connect(self) -> None:
         """
-        Runs the listener.
-        """
-
-        logger.info("Requesting host create and delete events...")
-        self.stream = self.client.events.subscribe(
-            ['ObjectCreated', 'ObjectDeleted'],
-            self.queue,
-            self.filter
-        )
-
-        for e in self.stream:
-            print(e)
-
-    def stop(self):
-        """
-        Terminates the event listener.
+        Opens the request to the event stream.
         """
 
-        if self.stream:
-            self.stream.close()
+        def subscribe() -> Generator:
+            return self.client.events.subscribe(
+                ['ObjectCreated', 'ObjectDeleted'],
+                self.queue,
+                self.filter
+            )
+
+        with self.lock:
+            if self.stream:
+                raise RuntimeError("Already run!")
+            logger.debug("Requesting host create and delete events...")
+            self.stream = subscribe()
+
+    def run(self) -> None:
+        """
+        Runs the user synchronization proc for each created host.
+        """
+
+        with self.lock:
+            if not self.stream:
+                raise RuntimeError("Not connected!")
+            try:
+                for e in self.stream:
+                    print(e)
+            finally:
+                self.stream.close()
 
 # client.objects.list('Host',
 #                     filters='host.zone == zone',

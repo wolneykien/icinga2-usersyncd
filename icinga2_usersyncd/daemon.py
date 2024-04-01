@@ -26,6 +26,8 @@ class that encapsulates all functions.
 from typing import Optional
 from icinga2apic.client import Client # type: ignore
 from .event_listener import EventListener
+from multiprocessing import Process
+import time
 
 import logging
 logger = logging.getLogger(__name__)
@@ -95,14 +97,34 @@ class Daemon:
             ca_certificate = ca_certificate
         )
 
-        self.listener = EventListener(self.client)
-
-    def run(self):
+    def run(self) -> None:
         """
         Runs the icinga2-usersyncd daemon.
         """
 
-        self.listener.run()
+        logger.info("Trying to connect...")
+        while True:
+            listener = EventListener(self.client)
+
+            try:
+                listener.connect()
+            except:
+                logger.debug("Connection error. Making a retry after a timeout...")
+                time.sleep(1)
+                continue
+
+            logger.info("Connected.")
+
+            listener_p = Process(
+                target = listener.run,
+                name = "EventListener",
+                daemon = True
+            )
+            listener_p.start()
+            listener_p.join()
+
+            logger.info("Connection closed. Making a retry after a timeout...")
+            time.sleep(1)
 
 # from icinga2apic.client import Client
 #

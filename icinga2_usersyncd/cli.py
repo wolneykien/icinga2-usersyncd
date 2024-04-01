@@ -30,7 +30,7 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-def main():
+def main() -> None:
     """
     The entry-point of the command-line interface to
     icinga2-usersyncd.

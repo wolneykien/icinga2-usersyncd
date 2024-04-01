@@ -16,7 +16,8 @@ Source: %name-%version.tar
 
 BuildRequires(pre): rpm-build-python3
 BuildRequires: python3(setuptools) python3(wheel) python3(pytest)
-BuildRequires: python3(icinga2apic)
+# For a proper events.subscribe():
+BuildRequires: python3-module-icinga2apic >= 0.7.5-alt3
 
 Requires: python3-module-%name = %version-%release
 
@@ -27,6 +28,8 @@ Icinga 2 instance.
 %package -n python3-module-%name
 Group: Development/Python3
 Summary: Python module for a daemon to synchronize ApiUser entries with Host agents on an Icinga 2 instance
+# For a proper events.subscribe():
+Requires: python3-module-icinga2apic >= 0.7.5-alt3
 
 %description -n python3-module-%name
 Python module for a daemon to synchronize ApiUser entries with Host
