@@ -27,6 +27,7 @@ command-line interface to the daemon and provides the entry-point
 from .daemon import Daemon
 
 import logging
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 def main():
