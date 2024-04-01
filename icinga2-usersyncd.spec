@@ -16,8 +16,6 @@ Source: %name-%version.tar
 
 BuildRequires(pre): rpm-build-python3
 BuildRequires: python3(setuptools) python3(wheel) python3(pytest)
-# For a proper events.subscribe():
-BuildRequires: python3-module-icinga2apic >= 0.7.5-alt3
 
 Requires: python3-module-%name = %version-%release
 
