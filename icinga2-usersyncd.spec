@@ -49,6 +49,9 @@ mkdir -p %buildroot%_sysconfdir/sysconfig
 mv -v %buildroot%python3_sitelibdir_noarch/%oname/%name.sysconfig \
       %buildroot%_sysconfdir/sysconfig/%name
 
+#check
+#pyproject_run_pytest
+
 %files
 %_bindir/%name
 %config(noreplace) %_sysconfdir/icinga2/conf.d/%name.conf
