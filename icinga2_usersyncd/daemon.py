@@ -54,10 +54,9 @@ class Daemon:
             for ``icinga2apic.client`` and an optional filter for Host
             objects.
 
-        :param url: The Icinga 2 API URL to connect to. The default
-            is https://localhost:5665/. If specified, overrides the
-            value specified in the configuration file under the
-            ``[api]`` section.
+        :param url: The Icinga 2 API URL to connect to. If specified,
+            overrides the value specified in the configuration file
+            under the ``[api]`` section.
 
         :param username: An optional username for BASIC authentication
             on the Icinga 2 API. If specified, overrides the value
@@ -88,7 +87,7 @@ class Daemon:
         logger.debug("Initializing the Icinga 2 API client...")
         self.client = Client(
             config_file = config_file,
-            url = url or "https://localhost:5665/",
+            url = url,
             username = username,
             password = password,
             certificate = certificate,
