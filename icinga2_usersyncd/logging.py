@@ -19,21 +19,16 @@
 
 """
 icinga2-usersyncd is a daemon to synchronize ApiUser entries with
-Host agents on an Icinga 2 instance. This module implements the
-command-line interface to the daemon and provides the entry-point
-``main``.
+Host agents on an Icinga 2 instance. This module defines a common
+logger object.
 """
 
-from .daemon import Daemon
-from .logging import logger, logging
+import logging
 
-# TODO: CLI options for verbosity.
-logger.setLevel(logging.DEBUG)
+logger = logging.getLogger("icinga2-usersyncd")
 
-def main() -> None:
-    """
-    The entry-point of the command-line interface to
-    icinga2-usersyncd.
-    """
+sl = logging.StreamHandler()
+sl.setFormatter(logging.Formatter('%(message)s'))
+sl.setLevel(logging.DEBUG)
 
-    Daemon(config_file = "/etc/sysconfig/icinga2-usersyncd").run()
+logger.addHandler(sl)

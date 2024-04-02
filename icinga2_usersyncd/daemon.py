@@ -27,11 +27,9 @@ from typing import Optional
 from icinga2apic.client import Client # type: ignore
 from .event_listener import EventListener
 from .comparator import Comparator
+from .logging import logger
 from multiprocessing import Process
 import time
-
-import logging
-logger = logging.getLogger(__name__)
 
 # from importlib.resources import files
 #
@@ -103,7 +101,8 @@ class Daemon:
         Runs the icinga2-usersyncd daemon.
         """
 
-        logger.info("Trying to connect...")
+        logger.info("[EventListener] Trying to connect...")
+
         while True:
             listener = EventListener(self.client)
 
@@ -152,7 +151,7 @@ class Daemon:
                 logger.debug("[Comparator] Connection error. Making a retry after a timeout...")
                 time.sleep(1)
 
-        logger.info("[Comparator] finished.")
+        logger.info("[Comparator] Finished.")
 
 # from icinga2apic.client import Client
 #

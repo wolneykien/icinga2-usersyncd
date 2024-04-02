@@ -26,9 +26,7 @@ that are configured on the Icinga 2 server.
 
 from typing import Optional, Generator
 from icinga2apic.client import Client # type: ignore
-
-import logging
-logger = logging.getLogger(__name__)
+from .logging import logger
 
 class Comparator():
     """
@@ -57,13 +55,13 @@ class Comparator():
         ApiUser lists.
         """
 
-        logger.debug("Requesting list of Hosts...")
+        logger.debug("[Comparator] Requesting list of Hosts...")
         hosts = self.client.objects.list("Host", filters = self.filter)
 
-        logger.debug("Requesting list of ApiUsers...")
+        logger.debug("[Comparator] Requesting list of ApiUsers...")
         apiusers = self.client.objects.list("ApiUser")
 
-        logger.info("ApiUsers synchronized.")
+        logger.info("[Comparator] ApiUsers synchronized.")
 
 
 # client.objects.list('Host',

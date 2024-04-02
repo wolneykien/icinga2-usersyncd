@@ -28,9 +28,7 @@ remove calls.
 from typing import Optional, Generator
 from icinga2apic.client import Client # type: ignore
 from threading import Lock
-
-import logging
-logger = logging.getLogger(__name__)
+from .logging import logger
 
 class EventListener():
     """
@@ -77,7 +75,7 @@ class EventListener():
         with self.lock:
             if self.stream:
                 raise RuntimeError("Already run!")
-            logger.debug("Requesting host create and delete events...")
+            logger.debug("[EventListener] Requesting host create and delete events...")
             self.stream = subscribe()
 
     def run(self) -> None:
