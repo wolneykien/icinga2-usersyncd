@@ -26,6 +26,7 @@ class that encapsulates all functions.
 from typing import Optional
 from icinga2apic.client import Client # type: ignore
 from .event_listener import EventListener
+from .comparator import Comparator
 from multiprocessing import Process
 import time
 
@@ -109,11 +110,11 @@ class Daemon:
             try:
                 listener.connect()
             except:
-                logger.debug("Connection error. Making a retry after a timeout...")
+                logger.debug("[EventListener] Connection error. Making a retry after a timeout...")
                 time.sleep(1)
                 continue
 
-            logger.info("Connected.")
+            logger.info("[EventListener] Connected.")
 
             listener_p = Process(
                 target = listener.run,
@@ -121,10 +122,37 @@ class Daemon:
                 daemon = True
             )
             listener_p.start()
-            listener_p.join()
 
-            logger.info("Connection closed. Making a retry after a timeout...")
+            comparator_p = Process(
+                target = self.comparator_loop,
+                name = "ComparatorLoop",
+                daemon = True
+            )
+            comparator_p.start()
+
+            listener_p.join()
+            logger.info("[EventListener] Connection closed. Making a retry after a timeout...")
+
+            comparator_p.terminate()
+            comparator_p.join()
+
             time.sleep(1)
+
+    def comparator_loop(self) -> None:
+        """
+        Runs the Comparator. Makes a restart on error.
+        """
+
+        while True:
+            comparator = Comparator(self.client)
+            try:
+                comparator.run()
+                break
+            except:
+                logger.debug("[Comparator] Connection error. Making a retry after a timeout...")
+                time.sleep(1)
+
+        logger.info("[Comparator] finished.")
 
 # from icinga2apic.client import Client
 #
