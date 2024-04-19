@@ -27,6 +27,7 @@ that are configured on the Icinga 2 server.
 from typing import Optional, Generator
 from icinga2apic.client import Client # type: ignore
 from .logging import logger
+from .apiuser import add_api_user, del_api_user
 
 class Comparator():
     """
@@ -60,6 +61,21 @@ class Comparator():
 
         logger.debug("[Comparator] Requesting list of ApiUsers...")
         apiusers = self.client.objects.list("ApiUser")
+
+        u_names = set([u["name"] for u in apiusers])
+        h_names = set([h["name"] for u in hosts])
+
+        for name in (h_names - u_names):
+            try:
+                add_api_user(client, name)
+            except Exception as ex:
+                logger.error(f"[Comparator] Error while trying to add ApiUser \"%s\": %s." % (name, str(ex)))
+
+        for name in (u_names - h_names):
+            try:
+                del_api_user(client, name)
+            except Exception as ex:
+                logger.error(f"[Comparator] Error while trying to add ApiUser \"%s\": %s." % (name, str(ex)))
 
         logger.info("[Comparator] ApiUsers synchronized.")
 
