@@ -29,6 +29,7 @@ from typing import Optional, Generator
 from icinga2apic.client import Client # type: ignore
 from threading import Lock
 from .logging import logger
+from .apiuser import add_api_user, del_api_user
 
 class EventListener():
     """
@@ -42,6 +43,8 @@ class EventListener():
                  queue: Optional[str] = None,
                  filter: Optional[str] = None):
         """
+        :param client: An Icinga 2 client object.
+
         :param queue: An optional queue name value to be used with
             the Icinga 2 event API. The default value is
             ``icinga2-usersyncd``. If specified, overrides the
@@ -88,10 +91,21 @@ class EventListener():
                 raise RuntimeError("Not connected!")
             try:
                 for e in self.stream:
-                    print(e)
+                    if e["type"] == "ObjectCreated":
+                        try:
+                            add_api_user(client, e["object_name"])
+                        except Exception as ex:
+                            logger.error(f"[EventListener] Error while trying to add ApiUser \"%s\": %s." % (e["object_name"], str(ex)))
+                    else if e["type"] == "ObjectDeleted":
+                        try:
+                            del_api_user(client, e["object_name"])
+                        except Exception as ex:
+                            logger.error(f"[EventListener] Error while trying to delete ApiUser \"%s\": %s." % (e["object_name"], str(ex)))
+            except Exception as ex:
+                logger.error(f"[EventListener] Error while processing the stream: %s." % str(ex))
             finally:
-                logger.info("[EventListener] Connection closed.")
                 self.stream.close()
+                logger.info("[EventListener] Connection closed.")
 
 # client.objects.list('Host',
 #                     filters='host.zone == zone',
