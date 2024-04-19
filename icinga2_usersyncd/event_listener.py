@@ -93,12 +93,12 @@ class EventListener():
                 for e in self.stream:
                     if e["type"] == "ObjectCreated":
                         try:
-                            add_api_user(client, e["object_name"])
+                            add_api_user(self.client, e["object_name"])
                         except Exception as ex:
                             logger.error(f"[EventListener] Error while trying to add ApiUser \"%s\": %s." % (e["object_name"], str(ex)))
-                    else if e["type"] == "ObjectDeleted":
+                    elif e["type"] == "ObjectDeleted":
                         try:
-                            del_api_user(client, e["object_name"])
+                            del_api_user(self.client, e["object_name"])
                         except Exception as ex:
                             logger.error(f"[EventListener] Error while trying to delete ApiUser \"%s\": %s." % (e["object_name"], str(ex)))
             except Exception as ex:

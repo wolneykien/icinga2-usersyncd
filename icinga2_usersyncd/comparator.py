@@ -63,17 +63,17 @@ class Comparator():
         apiusers = self.client.objects.list("ApiUser")
 
         u_names = set([u["name"] for u in apiusers])
-        h_names = set([h["name"] for u in hosts])
+        h_names = set([h["name"] for h in hosts])
 
         for name in (h_names - u_names):
             try:
-                add_api_user(client, name)
+                add_api_user(self.client, name)
             except Exception as ex:
                 logger.error(f"[Comparator] Error while trying to add ApiUser \"%s\": %s." % (name, str(ex)))
 
         for name in (u_names - h_names):
             try:
-                del_api_user(client, name)
+                del_api_user(self.client, name)
             except Exception as ex:
                 logger.error(f"[Comparator] Error while trying to add ApiUser \"%s\": %s." % (name, str(ex)))
 

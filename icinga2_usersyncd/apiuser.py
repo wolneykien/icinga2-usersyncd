@@ -36,7 +36,7 @@ def add_api_user(client: Client, name: str) -> None:
     :param name: The name of the ApiUser to create.
     """
 
-    resp = client.objects.create(self, "ApiUser", name, None, {
+    resp = client.objects.create("ApiUser", name, None, {
     })
 
 def del_api_user(client: Client, name: str) -> None:
@@ -49,4 +49,4 @@ def del_api_user(client: Client, name: str) -> None:
     :param name: The name of the ApiUser to delete.
     """
 
-    resp = client.objects.delete(self, "ApiUser", name)
+    resp = client.objects.delete("ApiUser", name)
