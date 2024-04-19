@@ -90,6 +90,7 @@ class EventListener():
                 for e in self.stream:
                     print(e)
             finally:
+                logger.info("[EventListener] Connection closed.")
                 self.stream.close()
 
 # client.objects.list('Host',

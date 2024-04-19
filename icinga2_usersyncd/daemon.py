@@ -50,7 +50,7 @@ class Daemon:
         """
         :param config_file: A path to configuration file, usually
             ``/etc/sysconfig/icinga2-usersyncd`` with ``[api]`` and
-            ``[daemon]`` sections, which defines connection parameters
+            ``[daemon]`` sections, which define connection parameters
             for ``icinga2apic.client`` and an optional filter for Host
             objects.
 
@@ -100,7 +100,7 @@ class Daemon:
         Runs the icinga2-usersyncd daemon.
         """
 
-        logger.info("[EventListener] Trying to connect...")
+        logger.info("Trying to connect the listener...")
 
         while True:
             listener = EventListener(self.client)
@@ -108,11 +108,11 @@ class Daemon:
             try:
                 listener.connect()
             except:
-                logger.debug("[EventListener] Connection error. Making a retry after a timeout...")
+                logger.debug("Listener not connected. Making a retry after a timeout...")
                 time.sleep(1)
                 continue
 
-            logger.info("[EventListener] Connected.")
+            logger.info("Listener connected.")
 
             listener_p = Process(
                 target = listener.run,
@@ -129,7 +129,7 @@ class Daemon:
             comparator_p.start()
 
             listener_p.join()
-            logger.info("[EventListener] Connection closed. Making a retry after a timeout...")
+            logger.info("Listener finished. Making a retry after a timeout...")
 
             comparator_p.terminate()
             comparator_p.join()
@@ -147,10 +147,10 @@ class Daemon:
                 comparator.run()
                 break
             except:
-                logger.debug("[Comparator] Connection error. Making a retry after a timeout...")
+                logger.debug("Comparator exited with an error. Making a retry after a timeout...")
                 time.sleep(1)
 
-        logger.info("[Comparator] Finished.")
+        logger.info("Comparator finished.")
 
 # from icinga2apic.client import Client
 #
