@@ -29,7 +29,7 @@ from typing import Optional, Generator
 from icinga2apic.client import Client # type: ignore
 from threading import Lock
 from .logging import logger
-from .apiuser import add_api_user, del_api_user
+from .apiuser import ApiUserManager
 
 class EventListener():
     """
@@ -40,10 +40,13 @@ class EventListener():
 
     def __init__(self,
                  client: Client,
+                 userManager: ApiUserManager,
                  queue: Optional[str] = None,
                  filter: Optional[str] = None):
         """
-        :param client: An Icinga 2 client object.
+        :param client: An Icinga 2 REST API client object.
+
+        :param userManager: An ApiUserManager instance.
 
         :param queue: An optional queue name value to be used with
             the Icinga 2 event API. The default value is
@@ -62,6 +65,7 @@ class EventListener():
         self.filter = filter
         self.stream: Optional[Generator] = None
         self.lock = Lock()
+        self.userManager = userManager
 
     def connect(self) -> None:
         """
@@ -93,12 +97,16 @@ class EventListener():
                 for e in self.stream:
                     if e["type"] == "ObjectCreated":
                         try:
-                            add_api_user(self.client, e["object_name"])
+                            self.userManager.add_api_user(
+                                e["object_name"]
+                            )
                         except Exception as ex:
                             logger.error(f"[EventListener] Error while trying to add ApiUser \"%s\": %s." % (e["object_name"], str(ex)))
                     elif e["type"] == "ObjectDeleted":
                         try:
-                            del_api_user(self.client, e["object_name"])
+                            self.userManager.del_api_user(
+                                e["object_name"]
+                            )
                         except Exception as ex:
                             logger.error(f"[EventListener] Error while trying to delete ApiUser \"%s\": %s." % (e["object_name"], str(ex)))
             except Exception as ex:

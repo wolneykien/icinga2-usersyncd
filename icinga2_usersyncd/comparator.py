@@ -27,7 +27,7 @@ that are configured on the Icinga 2 server.
 from typing import Optional, Generator
 from icinga2apic.client import Client # type: ignore
 from .logging import logger
-from .apiuser import add_api_user, del_api_user
+from .apiuser import ApiUserManager
 
 class Comparator():
     """
@@ -39,8 +39,13 @@ class Comparator():
 
     def __init__(self,
                  client: Client,
+                 userManager: ApiUserManager,
                  filter: Optional[str] = None):
         """
+        :param client: An Icinga 2 REST API client object.
+
+        :param userManager: An ApiUserManager instance.
+
         :param filter: An optional Host filter string (i. e.
             ``host.zone == "master"``). If specified, overrides the
             value specified in the configuration file under the
@@ -49,6 +54,7 @@ class Comparator():
 
         self.client = client
         self.filter = filter
+        self.userManager = userManager
 
     def run(self) -> None:
         """
@@ -67,13 +73,13 @@ class Comparator():
 
         for name in (h_names - u_names):
             try:
-                add_api_user(self.client, name)
+                self.userManager.add_api_user(name)
             except Exception as ex:
                 logger.error(f"[Comparator] Error while trying to add ApiUser \"%s\": %s." % (name, str(ex)))
 
         for name in (u_names - h_names):
             try:
-                del_api_user(self.client, name)
+                self.userManager.del_api_user(name)
             except Exception as ex:
                 logger.error(f"[Comparator] Error while trying to add ApiUser \"%s\": %s." % (name, str(ex)))
 

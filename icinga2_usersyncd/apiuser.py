@@ -23,30 +23,59 @@ Host agents on an Icinga 2 instance. This module defines functions
 to manage ApiUser objects on the Icinga 2.
 """
 
+from typing import Optional, Sequence
 from icinga2apic.client import Client # type: ignore
 from .logging import logger
 
-def add_api_user(client: Client, name: str) -> None:
+class ApiUserManager():
     """
-    Sends request to Icinga 2 to add ApiUser with the
-    given name.
-
-    :param client: An Icinga 2 client object.
-
-    :param name: The name of the ApiUser to create.
+    Manages per-host ApiUser objects on an Icinga 2 inctance
+    via REST API.
     """
 
-    resp = client.objects.create("ApiUser", name, None, {
-    })
+    def __init__(self, client:Client, prefix: str = "",
+                 permissions: Optional[Sequence[str]] = None):
+        """
+        Configures the manager to use the given client,
+        given user name prefix and a set of user permissions.
 
-def del_api_user(client: Client, name: str) -> None:
-    """
-    Sends request to Icinga 2 to delete ApiUser with the
-    given name.
+        :param client: An Icinga 2 REST API client object.
 
-    :param client: An Icinga 2 client object.
+        :param prefix: An optional user name prefix.
 
-    :param name: The name of the ApiUser to delete.
-    """
+        :param permissions: A set of user permissions. The
+            default value is ["actions/process-check-result"].
+        """
 
-    resp = client.objects.delete("ApiUser", name)
+        self.client = client
+        self.prefix = prefix
+        self.permissions = permissions
+
+    def add_api_user(self, name: str) -> None:
+        """
+        Sends request to Icinga 2 to add ApiUser with the
+        given name.
+
+        :param name: The name of the ApiUser to create
+            (without  a prefix).
+        """
+
+        resp = self.client.objects.create(
+            "ApiUser", self.prefix + name, None, {
+
+            }
+        )
+
+    def del_api_user(self, name: str) -> None:
+        """
+        Sends request to Icinga 2 to delete ApiUser with the
+        given name.
+
+        :param client: An Icinga 2 client object.
+
+        :param name: The name of the ApiUser to delete.
+        """
+
+        resp = self.client.objects.delete(
+            "ApiUser", self.prefix + name
+        )

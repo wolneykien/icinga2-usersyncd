@@ -28,6 +28,7 @@ from icinga2apic.client import Client # type: ignore
 from .event_listener import EventListener
 from .comparator import Comparator
 from .logging import logger
+from .apiuser import ApiUserManager
 from multiprocessing import Process
 import time
 
@@ -95,6 +96,8 @@ class Daemon:
             ca_certificate = ca_certificate
         )
 
+        self.userManager = ApiUserManager(self.client)
+
     def run(self) -> None:
         """
         Runs the icinga2-usersyncd daemon.
@@ -103,7 +106,7 @@ class Daemon:
         logger.info("Trying to connect the listener...")
 
         while True:
-            listener = EventListener(self.client)
+            listener = EventListener(self.client, self.userManager)
 
             try:
                 listener.connect()
@@ -142,7 +145,7 @@ class Daemon:
         """
 
         while True:
-            comparator = Comparator(self.client)
+            comparator = Comparator(self.client, self.userManager)
             try:
                 comparator.run()
                 break
