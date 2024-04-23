@@ -53,39 +53,40 @@ class ApiUserManager():
         self.prefix = prefix
         self.permissions = permissions
 
-    def add_api_user(self, name: str) -> None:
+    def add_api_user(self, hostname: str) -> None:
         """
-        Sends request to Icinga 2 to add ApiUser with the
-        given name.
+        Sends request to Icinga 2 to add ApiUser for the
+        host with the given name.
 
-        :param name: The name of the ApiUser to create
-            (without  a prefix).
+        :param hostname: The name of the host to add an ApiUser
+            to create the ApiUser object for.
         """
 
-        logger.debug(f"[ApiUser] Sending create request for API user '%s'..." % name)
+        logger.debug(f"[ApiUser] Sending create request for API user '%s' for host '%s'..." % ((self.prefix + hostname), hostname))
 
         resp = self.client.objects.create(
-            "ApiUser", self.prefix + name, None, {
-                "client_cn": name,
+            "ApiUser", self.prefix + hostname, None, {
+                "client_cn": hostname,
                 "permissions": [{
                     "permission": p,
-                    "filter": f"{{ host.name == %s }}" % name
+                    "filter": f"{{ host.name == %s }}" % hostname
                 } for p in self.permissions]
             }
         )
 
-    def del_api_user(self, name: str) -> None:
+    def del_api_user(self, hostname: str) -> None:
         """
-        Sends request to Icinga 2 to delete ApiUser with the
-        given name.
+        Sends request to Icinga 2 to delete ApiUser for host
+        with the given name.
 
         :param client: An Icinga 2 client object.
 
-        :param name: The name of the ApiUser to delete.
+        :param hostname: The name of the host to delete the ApiUser
+            object for.
         """
 
-        logger.debug(f"[ApiUser] Sending delete request for API user '%s'..." % name)
+        logger.debug(f"[ApiUser] Sending delete request for API user '%s'..." % (self.prefix + hostname))
 
         resp = self.client.objects.delete(
-            "ApiUser", self.prefix + name
+            "ApiUser", self.prefix + hostname
         )
