@@ -81,7 +81,7 @@ class Comparator():
             try:
                 self.userManager.del_api_user(name)
             except Exception as ex:
-                logger.error(f"[Comparator] Error while trying to add ApiUser \"%s\": %s." % (name, str(ex)))
+                logger.error(f"[Comparator] Error while trying to delete ApiUser \"%s\": %s." % (name, str(ex)))
 
         logger.info("[Comparator] ApiUsers synchronized.")
 
