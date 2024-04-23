@@ -62,6 +62,8 @@ class ApiUserManager():
             (without  a prefix).
         """
 
+        logger.debug(f"[ApiUser] Sending create request for API user '%s'..." % name)
+
         resp = self.client.objects.create(
             "ApiUser", self.prefix + name, None, {
                 "client_cn": name,
@@ -81,6 +83,8 @@ class ApiUserManager():
 
         :param name: The name of the ApiUser to delete.
         """
+
+        logger.debug(f"[ApiUser] Sending delete request for API user '%s'..." % name)
 
         resp = self.client.objects.delete(
             "ApiUser", self.prefix + name
