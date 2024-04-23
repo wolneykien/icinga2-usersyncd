@@ -23,9 +23,11 @@ Host agents on an Icinga 2 instance. This module defines functions
 to manage ApiUser objects on the Icinga 2.
 """
 
-from typing import Optional, Sequence
+from typing import Sequence
 from icinga2apic.client import Client # type: ignore
 from .logging import logger
+
+DEFAULT_PERMISSIONS = [ "actions/process-check-result" ]
 
 class ApiUserManager():
     """
@@ -34,7 +36,7 @@ class ApiUserManager():
     """
 
     def __init__(self, client:Client, prefix: str = "",
-                 permissions: Optional[Sequence[str]] = None):
+                 permissions: Sequence[str] = DEFAULT_PERMISSIONS):
         """
         Configures the manager to use the given client,
         given user name prefix and a set of user permissions.
@@ -62,7 +64,11 @@ class ApiUserManager():
 
         resp = self.client.objects.create(
             "ApiUser", self.prefix + name, None, {
-
+                "client_cn": name,
+                "permissions": [{
+                    "permission": p,
+                    "filter": f"{{ host.name == %s }}" % name
+                } for p in self.permissions]
             }
         )
 
