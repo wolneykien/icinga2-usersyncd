@@ -19,17 +19,12 @@
 
 """
 icinga2-usersyncd is a daemon to synchronize ApiUser entries with
-Host agents on an Icinga 2 instance. This module defines a common
-logger object.
+Host agents on an Icinga 2 instance. This module defines a set of
+constants used across the project.
 """
 
-import logging
-from .constants import PROG
-
-logger = logging.getLogger(PROG)
-
-sl = logging.StreamHandler()
-sl.setFormatter(logging.Formatter('%(message)s'))
-sl.setLevel(logging.DEBUG)
-
-logger.addHandler(sl)
+PROG = "icinga2-usersyncd"
+CONFIG = "/etc/sysconfig/icinga2-usersyncd"
+DEFAULT_PREFIX = "host-"
+DEFAULT_PERMISSIONS = [ "actions/process-check-result" ]
+DEFAULT_QUEUE = "icinga2-usersyncd"

@@ -26,8 +26,7 @@ to manage ApiUser objects on the Icinga 2.
 from typing import Sequence
 from icinga2apic.client import Client # type: ignore
 from .logging import logger
-
-DEFAULT_PERMISSIONS = [ "actions/process-check-result" ]
+from .constants import DEFAULT_PREFIX, DEFAULT_PERMISSIONS
 
 class ApiUserManager():
     """
@@ -35,7 +34,7 @@ class ApiUserManager():
     via REST API.
     """
 
-    def __init__(self, client:Client, prefix: str = "",
+    def __init__(self, client:Client, prefix: str = DEFAULT_PREFIX,
                  permissions: Sequence[str] = DEFAULT_PERMISSIONS):
         """
         Configures the manager to use the given client,
@@ -43,7 +42,8 @@ class ApiUserManager():
 
         :param client: An Icinga 2 REST API client object.
 
-        :param prefix: An optional user name prefix.
+        :param prefix: An optional user name prefix. The default
+            prefix is "host-".
 
         :param permissions: A set of user permissions. The
             default value is ["actions/process-check-result"].

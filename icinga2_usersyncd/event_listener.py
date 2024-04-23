@@ -30,6 +30,7 @@ from icinga2apic.client import Client # type: ignore
 from threading import Lock
 from .logging import logger
 from .apiuser import ApiUserManager
+from .constants import DEFAULT_QUEUE
 
 class EventListener():
     """
@@ -41,7 +42,7 @@ class EventListener():
     def __init__(self,
                  client: Client,
                  userManager: ApiUserManager,
-                 queue: Optional[str] = None,
+                 queue: str = DEFAULT_QUEUE,
                  filter: Optional[str] = None):
         """
         :param client: An Icinga 2 REST API client object.
@@ -61,7 +62,7 @@ class EventListener():
         """
 
         self.client = client
-        self.queue = queue or "icinga2-usersyncd"
+        self.queue = queue
         self.filter = filter
         self.stream: Optional[Generator] = None
         self.lock = Lock()

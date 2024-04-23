@@ -26,6 +26,7 @@ command-line interface to the daemon and provides the entry-point
 
 from .daemon import Daemon
 from .logging import logger, logging
+from .constants import CONFIG
 
 # TODO: CLI options for verbosity.
 logger.setLevel(logging.DEBUG)
@@ -36,4 +37,4 @@ def main() -> None:
     icinga2-usersyncd.
     """
 
-    Daemon(config_file = "/etc/sysconfig/icinga2-usersyncd").run()
+    Daemon(config_file = CONFIG).run()
