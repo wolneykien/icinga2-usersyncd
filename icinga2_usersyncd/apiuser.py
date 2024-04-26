@@ -26,7 +26,7 @@ to manage ApiUser objects on the Icinga 2.
 from typing import Sequence
 from icinga2apic.client import Client # type: ignore
 from .logging import logger
-from .constants import DEFAULT_PREFIX, DEFAULT_PERMISSIONS
+from .constants import DEFAULT_PREFIX, DEFAULT_TEMPLATES
 
 class ApiUserManager():
     """
@@ -35,7 +35,7 @@ class ApiUserManager():
     """
 
     def __init__(self, client:Client, prefix: str = DEFAULT_PREFIX,
-                 permissions: Sequence[str] = DEFAULT_PERMISSIONS):
+                 templates: Sequence[str] = DEFAULT_TEMPLATES):
         """
         Configures the manager to use the given client,
         given user name prefix and a set of user permissions.
@@ -45,13 +45,14 @@ class ApiUserManager():
         :param prefix: An optional user name prefix. The default
             prefix is "host-".
 
-        :param permissions: A set of user permissions. The
-            default value is ["actions/process-check-result"].
+        :param templates: An set of custom templates the created
+            ApiUser object should import. The  default value is
+            "usersync".
         """
 
         self.client = client
         self.prefix = prefix
-        self.permissions = permissions
+        self.templates = templates
 
     def add_api_user(self, hostname: str) -> None:
         """
@@ -65,12 +66,10 @@ class ApiUserManager():
         logger.debug(f"[ApiUser] Sending create request for API user '%s' for host '%s'..." % ((self.prefix + hostname), hostname))
 
         resp = self.client.objects.create(
-            "ApiUser", self.prefix + hostname, None, {
-                "client_cn": hostname,
-                "permissions": [{
-                    "permission": p,
-                    "filter": f"{{ host.name == %s }}" % hostname
-                } for p in self.permissions]
+            "ApiUser", self.prefix + hostname,
+            templates = self.templates,
+            attrs = {
+                "client_cn": hostname
             }
         )
 

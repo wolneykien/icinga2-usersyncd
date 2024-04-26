@@ -26,5 +26,5 @@ constants used across the project.
 PROG = "icinga2-usersyncd"
 CONFIG = "/etc/sysconfig/icinga2-usersyncd"
 DEFAULT_PREFIX = "host-"
-DEFAULT_PERMISSIONS = [ "actions/process-check-result" ]
+DEFAULT_TEMPLATES = [ "usersync" ]
 DEFAULT_QUEUE = "icinga2-usersyncd"
