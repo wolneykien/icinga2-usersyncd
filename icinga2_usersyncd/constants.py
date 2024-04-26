@@ -24,6 +24,7 @@ constants used across the project.
 """
 
 PROG = "icinga2-usersyncd"
+CONFIG_SECTION = "daemon"
 CONFIG = "/etc/sysconfig/icinga2-usersyncd"
 DEFAULT_PREFIX = "host-"
 DEFAULT_TEMPLATES = [ "usersync" ]

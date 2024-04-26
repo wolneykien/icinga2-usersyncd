@@ -9,3 +9,4 @@ ca_certificate = /var/lib/icinga2/ca/ca.crt
 [daemon]
 queue = icinga2-usersyncd
 filter = host.zone == "master"
+templates = usersync

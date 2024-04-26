@@ -29,8 +29,10 @@ from .event_listener import EventListener
 from .comparator import Comparator
 from .logging import logger
 from .apiuser import ApiUserManager
+from .constants import CONFIG_SECTION
 from multiprocessing import Process
 import time
+from configparser import ConfigParser, NoOptionError
 
 # from importlib.resources import files
 #
@@ -96,7 +98,34 @@ class Daemon:
             ca_certificate = ca_certificate
         )
 
-        self.userManager = ApiUserManager(self.client)
+        logger.debug("Initializing the daemon...")
+        if config_file:
+            config = ConfigParser()
+            config.read(config_file)
+
+            if config.has_section(CONFIG_SECTION):
+                self.queue = config.get(
+                    CONFIG_SECTION, "queue",
+                    fallback = None
+                ) or None
+                self.prefix = config.get(
+                    CONFIG_SECTION, "prefix",
+                    fallback = None
+                ) or None
+                self.templates = [
+                    t.strip() for t in config.get(
+                        CONFIG_SECTION, "templates",
+                        fallback = ""
+                    ).split(",") if t
+                ] or None
+                self.filter = config.get(
+                    CONFIG_SECTION, "filter",
+                    fallback = None
+                ) or None
+
+        self.userManager = ApiUserManager(self.client,
+                                          prefix = self.prefix,
+                                          templates = self.templates)
 
     def run(self) -> None:
         """
@@ -106,7 +135,10 @@ class Daemon:
         logger.info("Trying to connect the listener...")
 
         while True:
-            listener = EventListener(self.client, self.userManager)
+            listener = EventListener(self.client,
+                                     self.userManager,
+                                     queue = self.queue,
+                                     filter = self.filter)
 
             try:
                 listener.connect()
@@ -145,7 +177,9 @@ class Daemon:
         """
 
         while True:
-            comparator = Comparator(self.client, self.userManager)
+            comparator = Comparator(self.client,
+                                    self.userManager,
+                                    filter = self.filter)
             try:
                 comparator.run()
                 break
