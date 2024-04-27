@@ -142,8 +142,8 @@ class Daemon:
 
             try:
                 listener.connect()
-            except:
-                logger.debug("Listener not connected. Making a retry after a timeout...")
+            except Exception as ex:
+                logger.error(f"Listener not connected: %s. Making a retry after a timeout..." % str(ex))
                 time.sleep(1)
                 continue
 
@@ -183,8 +183,8 @@ class Daemon:
             try:
                 comparator.run()
                 break
-            except:
-                logger.debug("Comparator exited with an error. Making a retry after a timeout...")
+            except Exception as ex:
+                logger.error(f"Comparator exited with an error: %s. Making a retry after a timeout..." % str(ex))
                 time.sleep(1)
 
         logger.info("Comparator finished.")
