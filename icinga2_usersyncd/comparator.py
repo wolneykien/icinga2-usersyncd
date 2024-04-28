@@ -79,13 +79,13 @@ class Comparator():
             try:
                 self.userManager.add_api_user(name)
             except Exception as ex:
-                logger.error(f"[Comparator] Error while trying to add ApiUser \"%s\": %s." % (name, str(ex)))
+                logger.error(f"[Comparator] Error while trying to add ApiUser for host \"%s\": %s." % (name, str(ex)))
 
         for name in (u_names - h_names):
             try:
                 self.userManager.del_api_user(name)
             except Exception as ex:
-                logger.error(f"[Comparator] Error while trying to delete ApiUser \"%s\": %s." % (name, str(ex)))
+                logger.error(f"[Comparator] Error while trying to delete ApiUser for host \"%s\": %s." % (name, str(ex)))
 
         logger.info("[Comparator] ApiUsers synchronized.")
 
