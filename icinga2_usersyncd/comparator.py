@@ -66,7 +66,10 @@ class Comparator():
         hosts = self.client.objects.list("Host", filters = self.filter)
 
         logger.debug("[Comparator] Requesting list of ApiUsers...")
-        apiusers = self.client.objects.list("ApiUser")
+        apiusers = self.client.objects.list(
+            "ApiUser", filters = "match(prefix + \"*\", obj.name)",
+            filter_vars = {"prefix": self.userManager.prefix}
+        )
 
         u_names = set([u["name"] for u in apiusers])
         h_names = set([h["name"] for h in hosts])
