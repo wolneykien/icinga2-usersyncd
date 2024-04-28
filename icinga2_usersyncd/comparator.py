@@ -71,7 +71,8 @@ class Comparator():
             filter_vars = {"prefix": self.userManager.prefix}
         )
 
-        u_names = set([u["name"] for u in apiusers])
+        u_names = set([u["name"].lstrip(self.userManager.prefix) \
+                       for u in apiusers])
         h_names = set([h["name"] for h in hosts])
 
         for name in (h_names - u_names):
