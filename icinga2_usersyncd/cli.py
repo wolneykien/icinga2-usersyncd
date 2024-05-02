@@ -27,6 +27,8 @@ command-line interface to the daemon and provides the entry-point
 from .daemon import Daemon
 from .logging import logger, logging
 from .constants import CONFIG
+import sys
+import signal
 
 # TODO: CLI options for verbosity.
 logger.setLevel(logging.DEBUG)
@@ -37,4 +39,18 @@ def main() -> None:
     icinga2-usersyncd.
     """
 
-    Daemon(config_file = CONFIG).run()
+    for s in signal.Signals:
+        try:
+            signal.signal(s, signal.SIG_IGN)
+        except OSError:
+            pass
+
+    exit_on_signal = lambda s, f: sys.exit(0)
+    signal.signal(signal.SIGTERM, exit_on_signal)
+    signal.signal(signal.SIGQUIT, exit_on_signal)
+    signal.signal(signal.SIGINT, exit_on_signal)
+
+    try:
+        Daemon(config_file = CONFIG).run()
+    except KeyboardInterrupt:
+        pass
