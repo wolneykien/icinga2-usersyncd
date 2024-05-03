@@ -47,9 +47,7 @@ class Comparator():
         :param userManager: An ApiUserManager instance.
 
         :param filter: An optional Host filter string (i. e.
-            ``host.zone == "master"``). If specified, overrides the
-            value specified in the configuration file under the
-            ``[daemon]`` section.
+            ``host.zone == "master"``).
         """
 
         self.client = client

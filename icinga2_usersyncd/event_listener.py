@@ -49,16 +49,12 @@ class EventListener():
 
         :param userManager: An ApiUserManager instance.
 
-        :param queue: An optional queue name value to be used with
+        :param queue: A queue name value to be used with
             the Icinga 2 event API. The default value is
-            ``icinga2-usersyncd``. If specified, overrides the
-            value specified in the configuration file under the
-            ``[daemon]`` section.
+            ``icinga2-usersyncd``.
 
         :param filter: An optional Host filter string (i. e.
-            ``host.zone == "master"``). If specified, overrides the
-            value specified in the configuration file under the
-            ``[daemon]`` section.
+            ``host.zone == "master"``).
         """
 
         self.client = client

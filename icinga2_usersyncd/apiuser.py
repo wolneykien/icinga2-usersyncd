@@ -43,10 +43,10 @@ class ApiUserManager():
 
         :param client: An Icinga 2 REST API client object.
 
-        :param prefix: An optional user name prefix. The default
+        :param prefix: A user name prefix. The default
             prefix is "host-".
 
-        :param templates: An set of custom templates the created
+        :param templates: A set of custom templates the created
             ApiUser object should import. The  default value is
             "usersync".
         """

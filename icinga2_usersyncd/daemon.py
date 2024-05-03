@@ -23,7 +23,7 @@ Host agents on an Icinga 2 instance. This module defines the main
 class that encapsulates all functions.
 """
 
-from typing import Optional
+from typing import Optional, Sequence
 from icinga2apic.client import Client # type: ignore
 from .event_listener import EventListener
 from .comparator import Comparator
@@ -49,7 +49,11 @@ class Daemon:
                  password: Optional[str] = None,
                  certificate: Optional[str] = None,
                  key: Optional[str] = None,
-                 ca_certificate: Optional[str] = None):
+                 ca_certificate: Optional[str] = None,
+                 queue: Optional[str] = None,
+                 prefix: Optional[str] = None,
+                 templates: Optional[Sequence[str]] = None,
+                 filter: Optional[str] = None):
         """
         :param config_file: A path to configuration file, usually
             ``/etc/sysconfig/icinga2-usersyncd`` with ``[api]`` and
@@ -81,10 +85,32 @@ class Daemon:
             overrides the value specified in the configuration file
             under the ``[api]`` section.
 
-        :param ca_certificate: The Icinga 2 CA certificate used to
-            verify the API connection. If specified, overrides the
-            value specified in the configuration file under the
+        :param ca_certificate: The Icinga 2 CA certificate to be
+            used to verify the API connection. If specified, overrides
+            the value specified in the configuration file under the
             ``[api]`` section.
+
+        :param queue: A queue name to be used with the Icinga 2
+            event API. The default value is
+            ``icinga2-usersyncd``. If specified, overrides the
+            value specified in the configuration file under the
+            ``[daemon]`` section.
+
+        :param prefix: A user name prefix. The default
+            prefix is "host-". If specified, overrides the
+            value specified in the configuration file under the
+            ``[daemon]`` section.
+
+        :param templates: A set of custom templates the created
+            ApiUser object should import. The  default value is
+            "usersync". If specified, overrides the
+            value specified in the configuration file under the
+            ``[daemon]`` section.
+
+        :param filter: An optional Host filter string (i. e.
+            ``host.zone == "master"``). If specified, overrides the
+            value specified in the configuration file under the
+            ``[daemon]`` section.
         """
 
         logger.debug("Initializing the Icinga 2 API client...")
@@ -104,21 +130,21 @@ class Daemon:
             config.read(config_file)
 
             if config.has_section(CONFIG_SECTION):
-                self.queue = config.get(
+                self.queue = queue or config.get(
                     CONFIG_SECTION, "queue",
                     fallback = None
                 ) or None
-                self.prefix = config.get(
+                self.prefix = prefix or config.get(
                     CONFIG_SECTION, "prefix",
                     fallback = None
                 ) or None
-                self.templates = [
+                self.templates = templates or [
                     t.strip() for t in config.get(
                         CONFIG_SECTION, "templates",
                         fallback = ""
                     ).split(",") if t
                 ] or None
-                self.filter = config.get(
+                self.filter = filter or config.get(
                     CONFIG_SECTION, "filter",
                     fallback = None
                 ) or None
