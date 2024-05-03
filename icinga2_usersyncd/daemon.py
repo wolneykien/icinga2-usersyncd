@@ -29,7 +29,7 @@ from .event_listener import EventListener
 from .comparator import Comparator
 from .logging import logger
 from .apiuser import ApiUserManager
-from .constants import CONFIG_SECTION
+from .constants import CONFIG_SECTION, DEFAULT_DELAY
 from multiprocessing import Process
 import time
 from configparser import ConfigParser, NoOptionError
@@ -53,7 +53,8 @@ class Daemon:
                  queue: Optional[str] = None,
                  prefix: Optional[str] = None,
                  templates: Optional[Sequence[str]] = None,
-                 filter: Optional[str] = None):
+                 filter: Optional[str] = None,
+                 delay: Optional[float] = None):
         """
         :param config_file: A path to configuration file, usually
             ``/etc/sysconfig/icinga2-usersyncd`` with ``[api]`` and
@@ -111,6 +112,11 @@ class Daemon:
             ``host.zone == "master"``). If specified, overrides the
             value specified in the configuration file under the
             ``[daemon]`` section.
+
+        :param dealy: A number of seconds to wait between connection
+            attempts. The default is 1 second. If specified, overrides
+            the value specified in the configuration file under the
+            ``[daemon]`` section.
         """
 
         logger.debug("Initializing the Icinga 2 API client...")
@@ -148,6 +154,10 @@ class Daemon:
                     CONFIG_SECTION, "filter",
                     fallback = None
                 ) or None
+                self.delay = delay or float(config.get(
+                    CONFIG_SECTION, "delay",
+                    fallback = DEFAULT_DELAY
+                ))
 
         self.userManager = ApiUserManager(self.client,
                                           prefix = self.prefix,
@@ -170,7 +180,7 @@ class Daemon:
                 listener.connect()
             except Exception as ex:
                 logger.error(f"Listener not connected: %s. Making a retry after a timeout..." % str(ex))
-                time.sleep(1)
+                time.sleep(self.delay)
                 continue
 
             logger.info("Listener connected.")
@@ -195,7 +205,7 @@ class Daemon:
             comparator_p.terminate()
             comparator_p.join()
 
-            time.sleep(1)
+            time.sleep(self.delay)
 
     def comparator_loop(self) -> None:
         """
@@ -211,7 +221,7 @@ class Daemon:
                 break
             except Exception as ex:
                 logger.error(f"Comparator exited with an error: %s. Making a retry after a timeout..." % str(ex))
-                time.sleep(1)
+                time.sleep(self.delay)
 
         logger.info("Comparator finished.")
 

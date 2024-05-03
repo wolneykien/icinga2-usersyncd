@@ -29,3 +29,4 @@ CONFIG = "/etc/sysconfig/icinga2-usersyncd"
 DEFAULT_PREFIX = "host-"
 DEFAULT_TEMPLATES = [ "usersync" ]
 DEFAULT_QUEUE = "icinga2-usersyncd"
+DEFAULT_DELAY = 1
