@@ -23,7 +23,11 @@ Host agents on an Icinga 2 instance. This module defines a set of
 constants used across the project.
 """
 
-PROG = "icinga2-usersyncd"
+VERSION_INFO = {
+    'PROG': "icinga2-usersyncd",
+    'VERSION': "0.1.0",
+    'YEAR': "2024"
+}
 CONFIG_SECTION = "daemon"
 CONFIG = "/etc/sysconfig/icinga2-usersyncd"
 DEFAULT_PREFIX = "host-"

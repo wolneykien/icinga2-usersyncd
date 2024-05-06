@@ -24,9 +24,9 @@ logger object.
 """
 
 import logging
-from .constants import PROG
+from .constants import VERSION_INFO
 
-logger = logging.getLogger(PROG)
+logger = logging.getLogger(VERSION_INFO['PROG'])
 
 sl = logging.StreamHandler()
 sl.setFormatter(logging.Formatter('%(message)s'))

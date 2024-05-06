@@ -26,7 +26,7 @@ command-line interface to the daemon and provides the entry-point
 
 from .daemon import Daemon
 from .logging import logger, logging
-from .constants import CONFIG, DEFAULT_QUEUE, DEFAULT_PREFIX, DEFAULT_TEMPLATES, DEFAULT_DELAY
+from .constants import VERSION_INFO, CONFIG, DEFAULT_QUEUE, DEFAULT_PREFIX, DEFAULT_TEMPLATES, DEFAULT_DELAY
 import sys
 import signal
 from argparse import ArgumentParser
@@ -49,15 +49,33 @@ def main() -> None:
     signal.signal(signal.SIGINT, exit_on_signal)
 
     parser = ArgumentParser(
-        prog = 'icinga2-usersyncd',
+        prog = VERSION_INFO['PROG'],
         description = '''
-        icinga2-usersyncd is a daemon to synchronize ApiUser
-        entries with Host agents on an Icinga 2 instance.
-        ''',
+icinga2-usersyncd is a daemon to synchronize ApiUser entries with
+Host agents on an Icinga 2 instance.
+        '''.strip(),
         epilog = '''
-        For more information see icinga2-usersyncd(1).
-        Report bugs to https://bugzilla.altlinux.org/.
-        '''
+For more information see icinga2-usersyncd(1).
+Report bugs to https://bugzilla.altlinux.org/.
+        '''.strip()
+    )
+
+    parser.add_argument(
+        '-V', '--version',
+        action = 'version',
+        help = "show program's version information and exit",
+        version = (f'''
+%(PROG)s %(VERSION)s
+
+Copyright (C) %(YEAR)s BaseALT Ltd.
+
+License GPLv2+: GNU GPL version 2 or later <https://gnu.org/licenses/gpl.html>.
+
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Paul Wolneykien.
+        ''' % VERSION_INFO).strip()
     )
 
     parser.add_argument('-v', '--verbose',
