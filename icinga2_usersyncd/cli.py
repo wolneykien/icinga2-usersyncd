@@ -29,9 +29,7 @@ from .logging import logger, logging
 from .constants import CONFIG
 import sys
 import signal
-
-# TODO: CLI options for verbosity.
-logger.setLevel(logging.DEBUG)
+from argparse import ArgumentParser
 
 def main() -> None:
     """
@@ -49,6 +47,33 @@ def main() -> None:
     signal.signal(signal.SIGTERM, exit_on_signal)
     signal.signal(signal.SIGQUIT, exit_on_signal)
     signal.signal(signal.SIGINT, exit_on_signal)
+
+    parser = ArgumentParser(
+        prog = 'icinga2-usersyncd',
+        description = '''
+        icinga2-usersyncd is a daemon to synchronize ApiUser
+        entries with Host agents on an Icinga 2 instance.
+        ''',
+        epilog = '''
+        For more information see icinga2-usersyncd(1).
+        Report bugs to https://bugzilla.altlinux.org/.
+        '''
+    )
+
+    parser.add_argument('-v', '--verbose',
+                        dest = 'log_level',
+                        const = logging.DEBUG,
+                        action = 'store_const',
+                        help = 'show more messages')
+    parser.add_argument('-q', '--quiet',
+                        dest = 'log_level',
+                        const = logging.ERROR,
+                        action = 'store_const',
+                        help = 'show less messages')
+
+    args = parser.parse_args()
+
+    logger.setLevel(args.log_level or logging.INFO)
 
     try:
         Daemon(config_file = CONFIG).run()
