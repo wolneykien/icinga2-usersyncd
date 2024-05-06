@@ -50,6 +50,8 @@ mkdir -p %buildroot%_sysconfdir/sysconfig
 mv -v %buildroot%python3_sitelibdir_noarch/%oname/%name.sysconfig \
       %buildroot%_sysconfdir/sysconfig/%name
 
+install -D -m0644 %name.1 %buildroot%_man1dir/%name.1
+
 #check
 #pyproject_run_pytest
 
@@ -57,6 +59,7 @@ mv -v %buildroot%python3_sitelibdir_noarch/%oname/%name.sysconfig \
 %_bindir/%name
 %config(noreplace) %_sysconfdir/icinga2/conf.d/%name.conf
 %config(noreplace) %_sysconfdir/sysconfig/%name
+%_man1dir/%name.1
 
 %files -n python3-module-%name
 %python3_sitelibdir_noarch/%oname
