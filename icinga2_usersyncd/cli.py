@@ -26,7 +26,7 @@ command-line interface to the daemon and provides the entry-point
 
 from .daemon import Daemon
 from .logging import logger, logging
-from .constants import CONFIG
+from .constants import CONFIG, DEFAULT_QUEUE, DEFAULT_PREFIX, DEFAULT_TEMPLATES, DEFAULT_DELAY
 import sys
 import signal
 from argparse import ArgumentParser
@@ -73,15 +73,68 @@ def main() -> None:
                         help = 'show less messages')
 
     parser.add_argument('-c', '--config', action = 'store',
+                        dest = 'config',
                         default = CONFIG,
                         help = "configuration file "
                               f"(the default is %s)" % CONFIG)
+
+    parser.add_argument('--no-config', action = 'store_const',
+                        dest = 'config', const = None,
+                        help = "do not use a configuration file")
+
+    parser.add_argument('-L', '--url', dest = 'url', action = 'store',
+                        help = 'Icinga 2 API URL')
+
+    parser.add_argument('-u', '--username', action = 'store',
+                        help = 'username to authenticate to Icinga 2 API')
+
+    parser.add_argument('-p', '--password', action = 'store',
+                        help = 'password to authenticate to Icinga 2 API')
+
+    parser.add_argument('-C', '--cert', action = 'store',
+                        help = 'certificate to authenticate to Icinga 2 API')
+
+    parser.add_argument('-K', '--key', dest = 'key',
+                        action = 'store',
+                        help = 'key to authenticate to Icinga 2 API')
+
+    parser.add_argument('-A', '--ca', dest = 'ca_cert',
+                        action = 'store',
+                        help = 'Icinga 2 API certificate (CA)')
+
+    parser.add_argument('-Q', '--queue', action = 'store',
+                        help = f"event queue name to use (the default is either from the config or '%s' if omitted)" % DEFAULT_QUEUE)
+
+    parser.add_argument('-P', '--prefix', dest = 'prefix',
+                        action = 'store',
+                        help = f"a prefix for ApiUser names (the default is either from the config or '%s' if omitted)" % DEFAULT_PREFIX)
+
+    parser.add_argument('-T', '--templates', action = 'store',
+                        help = f"a set of templates each created ApiUser should import (the default is either from the config or [%s] if omitted)" % ", ".join(DEFAULT_TEMPLATES))
+
+    parser.add_argument('-f', '--filter', action = 'store',
+                        help = 'an optional Host filter string')
+
+    parser.add_argument('-t', '--delay', dest = 'delay',
+                        action = 'store',
+                        help = f"a number of seconds to wait between connection attempts (the default is either from the config or %d if omitted)" % DEFAULT_DELAY)
 
     args = parser.parse_args()
 
     logger.setLevel(args.log_level or logging.INFO)
 
     try:
-        Daemon(config_file = args.config).run()
+        Daemon(config_file = args.config,
+               url = args.url,
+               username = args.username,
+               password = args.password,
+               certificate = args.cert,
+               key = args.key,
+               ca_certificate = args.ca_cert,
+               queue = args.queue,
+               prefix = args.prefix,
+               templates = args.templates,
+               filter = args.filter,
+               delay = args.delay).run()
     except KeyboardInterrupt:
         pass
