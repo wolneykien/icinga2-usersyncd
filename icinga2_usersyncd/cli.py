@@ -65,6 +65,7 @@ def main() -> None:
                         const = logging.DEBUG,
                         action = 'store_const',
                         help = 'show more messages')
+
     parser.add_argument('-q', '--quiet',
                         dest = 'log_level',
                         const = logging.ERROR,
