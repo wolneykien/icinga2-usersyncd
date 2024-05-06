@@ -119,6 +119,9 @@ class Daemon:
             ``[daemon]`` section.
         """
 
+        if config_file:
+            logger.debug("Using configuration file %s." % config_file)
+
         logger.debug("Initializing the Icinga 2 API client...")
         self.client = Client(
             config_file = config_file,

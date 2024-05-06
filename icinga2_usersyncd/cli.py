@@ -72,11 +72,16 @@ def main() -> None:
                         action = 'store_const',
                         help = 'show less messages')
 
+    parser.add_argument('-c', '--config', action = 'store',
+                        default = CONFIG,
+                        help = "configuration file "
+                              f"(the default is %s)" % CONFIG)
+
     args = parser.parse_args()
 
     logger.setLevel(args.log_level or logging.INFO)
 
     try:
-        Daemon(config_file = CONFIG).run()
+        Daemon(config_file = args.config).run()
     except KeyboardInterrupt:
         pass
