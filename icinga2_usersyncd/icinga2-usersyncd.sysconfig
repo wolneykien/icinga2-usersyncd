@@ -1,12 +1,29 @@
+# Icinga 2 API connection
+# -----------------------
 [api]
+# URL to connect:
 url = https://localhost:5665
+
+# In order to authenticate use either client certificate:
 certificate = /etc/ssl/certs/myhostname.crt
 key = /etc/ssl/private/myhostname.key
+
+# Or a username and a password:
 #username = root
 #password = 
-ca_certificate = /var/lib/icinga2/ca/ca.crt
 
+# In order to check Icinga 2 CA certificate you need to change the
+# 'localhost' to particular host name in the URL.
+#ca_certificate = /var/lib/icinga2/ca/ca.crt
+
+# Synchronization setup
+# ---------------------
 [daemon]
+# Event queue name to use:
 queue = icinga2-usersyncd
-filter = host.zone == "master"
+
+# An optional Host filter string:
+#filter = host.zone == "master"
+
+# A set of templates each created ApiUser should import:
 templates = usersync
