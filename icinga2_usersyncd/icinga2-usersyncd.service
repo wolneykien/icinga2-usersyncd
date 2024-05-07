@@ -1,0 +1,10 @@
+[Unit]
+Description=Synchronize ApiUser entries with Host agents on an Icinga 2
+After=icinga2.service
+
+[Service]
+ExecStart=/usr/bin/icinga2-usersyncd
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

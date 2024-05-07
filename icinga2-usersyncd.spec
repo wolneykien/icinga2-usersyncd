@@ -54,6 +54,10 @@ mkdir -p %buildroot%_man1dir
 mv -v %buildroot%python3_sitelibdir_noarch/%oname/%name.1 \
       %buildroot%_man1dir/%name.1
 
+mkdir -p %buildroot%_unitdir
+mv -v %buildroot%python3_sitelibdir_noarch/%oname/%name.service \
+      %buildroot%_unitdir/%name.service
+
 #check
 #pyproject_run_pytest
 
@@ -62,6 +66,7 @@ mv -v %buildroot%python3_sitelibdir_noarch/%oname/%name.1 \
 %config(noreplace) %_sysconfdir/icinga2/conf.d/%name.conf
 %config(noreplace) %_sysconfdir/sysconfig/%name
 %_man1dir/%name.1.*
+%_unitdir/%name.service
 
 %files -n python3-module-%name
 %python3_sitelibdir_noarch/%oname
