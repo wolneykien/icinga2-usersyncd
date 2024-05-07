@@ -50,7 +50,9 @@ mkdir -p %buildroot%_sysconfdir/sysconfig
 mv -v %buildroot%python3_sitelibdir_noarch/%oname/%name.sysconfig \
       %buildroot%_sysconfdir/sysconfig/%name
 
-install -D -m0644 %name.1 %buildroot%_man1dir/%name.1
+mkdir -p %buildroot%_man1dir
+mv -v %buildroot%python3_sitelibdir_noarch/%oname/%name.1 \
+      %buildroot%_man1dir/%name.1
 
 #check
 #pyproject_run_pytest

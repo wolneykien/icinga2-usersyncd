@@ -29,7 +29,7 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools_scm]
 
 [tool.setuptools.package-data]
-"*" = ["**.conf", "**.sysconfig", "**.service"]
+"*" = ["**.conf", "**.sysconfig", "**.service", "**.1"]
 
 [project.scripts]
 icinga2-usersyncd = "icinga2_usersyncd.cli:main"
