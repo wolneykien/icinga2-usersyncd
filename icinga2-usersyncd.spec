@@ -73,3 +73,5 @@ mv -v %buildroot%python3_sitelibdir_noarch/%oname/%name.service \
 %python3_sitelibdir_noarch/%oname-%version.dist-info
 
 %changelog
+* Sat Mar 30 2024 Paul Wolneykien <manowar@altlinux.org> 0.1.0-alt1
+- Initial build for Sisyphus.
