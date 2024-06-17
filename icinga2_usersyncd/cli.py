@@ -140,7 +140,7 @@ Written by Paul Wolneykien.
     parser.add_argument('--setup',
                         dest = 'do_setup',
                         action = 'store_true',
-                        help = 'generate certificate for CN "icinga2-usersyncd and exit"')
+                        help = 'generate certificate for CN "icinga2-usersyncd and exit')
 
     args = parser.parse_args()
 
