@@ -30,6 +30,7 @@ from .constants import VERSION_INFO, CONFIG, DEFAULT_QUEUE, DEFAULT_PREFIX, DEFA
 import sys
 import signal
 from argparse import ArgumentParser
+import os
 
 def main() -> None:
     """
