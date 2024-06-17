@@ -5,7 +5,7 @@
 url = https://localhost:5665
 
 # In order to authenticate use either client certificate
-(can be generated using `icinga2 pki new-cert`):
+(can be generated using `icinga2-usersyncd --setup`):
 certificate = /var/lib/icinga2/certs/icinga2-usersyncd.crt
 key = /var/lib/icinga2/certs/icinga2-usersyncd.key
 
