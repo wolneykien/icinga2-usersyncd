@@ -148,10 +148,7 @@ Written by Paul Wolneykien.
     logger.setLevel(args.log_level or logging.INFO)
 
     if args.do_setup:
-        os.execl("/usr/sbin/icinga2", "pki", "new-cert",
-	         "--cn", "icinga2-usersyncd",
-                 "--key", "/var/lib/icinga2/certs/icinga2-usersyncd.key",
-                 "--cert", "/var/lib/icinga2/certs/icinga2-usersyncd.crt")
+        os.system("/usr/sbin/icinga2 pki new-cert --cn icinga2-usersyncd --key /var/lib/icinga2/certs/icinga2-usersyncd.key --cert /var/lib/icinga2/certs/icinga2-usersyncd.crt")
 
     try:
         Daemon(config_file = args.config,
