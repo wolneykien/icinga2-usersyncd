@@ -58,8 +58,22 @@ mkdir -p %buildroot%_unitdir
 mv -v %buildroot%python3_sitelibdir_noarch/%oname/%name.service \
       %buildroot%_unitdir/%name.service
 
+# Create empty files for %%ghost:
+touch %buildroot%_localstatedir/icinga2/certs/icinga2-usersyncd.key
+touch %buildroot%_localstatedir/icinga2/certs/icinga2-usersyncd.crt
+
 #check
 #pyproject_run_pytest
+
+%post
+if [ $1 -eq 1 ]
+then
+    # initial installation
+    icinga2 pki new-cert \
+	    --cn icinga2-usersyncd \
+	    --key /var/lib/icinga2/certs/icinga2-usersyncd.key \
+	    --cert /var/lib/icinga2/certs/icinga2-usersyncd.crt
+fi
 
 %files
 %_bindir/%name
@@ -67,6 +81,8 @@ mv -v %buildroot%python3_sitelibdir_noarch/%oname/%name.service \
 %config(noreplace) %_sysconfdir/sysconfig/%name
 %_man1dir/%name.1.*
 %_unitdir/%name.service
+%ghost /var/lib/icinga2/certs/icinga2-usersyncd.key
+%ghost /var/lib/icinga2/certs/icinga2-usersyncd.crt
 
 %files -n python3-module-%name
 %python3_sitelibdir_noarch/%oname

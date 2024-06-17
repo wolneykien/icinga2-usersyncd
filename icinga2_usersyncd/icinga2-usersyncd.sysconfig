@@ -4,12 +4,13 @@
 # URL to connect:
 url = https://localhost:5665
 
-# In order to authenticate use either client certificate:
-certificate = /etc/ssl/certs/myhostname.crt
-key = /etc/ssl/private/myhostname.key
+# In order to authenticate use either client certificate
+(can be generated using `icinga2 pki new-cert`):
+certificate = /var/lib/icinga2/certs/icinga2-usersyncd.crt
+key = /var/lib/icinga2/certs/icinga2-usersyncd.key
 
-# Or a username and a password:
-#username = root
+# or a username and a password:
+#username = icinga2-usersyncd
 #password = 
 
 # In order to check Icinga 2 CA certificate you need to change the
