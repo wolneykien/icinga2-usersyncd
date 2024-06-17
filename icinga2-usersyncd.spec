@@ -66,16 +66,6 @@ touch %buildroot%_localstatedir/icinga2/certs/icinga2-usersyncd.crt
 #check
 #pyproject_run_pytest
 
-%post
-if [ $1 -eq 1 ]
-then
-    # initial installation
-    icinga2 pki new-cert \
-	    --cn icinga2-usersyncd \
-	    --key /var/lib/icinga2/certs/icinga2-usersyncd.key \
-	    --cert /var/lib/icinga2/certs/icinga2-usersyncd.crt
-fi
-
 %files
 %_bindir/%name
 %config(noreplace) %_sysconfdir/icinga2/conf.d/%name.conf
