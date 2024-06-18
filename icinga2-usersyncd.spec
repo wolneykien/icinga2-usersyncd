@@ -2,7 +2,7 @@
 %define oname icinga2_usersyncd
 
 Name: icinga2-usersyncd
-Version: 0.1.0
+Version: 0.1.1
 Release: alt1
 
 Group: Monitoring
@@ -82,5 +82,13 @@ touch %buildroot%_localstatedir/icinga2/certs/icinga2-usersyncd.crt
 %python3_sitelibdir_noarch/%oname-%version.dist-info
 
 %changelog
+* Tue Jun 18 2024 Paul Wolneykien <manowar@altlinux.org> 0.1.1-alt1
+- Ignore urllib3.exceptions.InsecureRequestWarning if ca_certificate
+  is not set.
+- Fix: Add permission to query ApiUser objects.
+- Switch to setup.cfg in order to support older build tools.
+- Added `icinga2-usersyncd --setup` variant to generate user
+  certificate.
+
 * Sat Mar 30 2024 Paul Wolneykien <manowar@altlinux.org> 0.1.0-alt1
 - Initial build for Sisyphus.
