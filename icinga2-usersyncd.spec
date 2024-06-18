@@ -61,6 +61,7 @@ mv -v %buildroot%python3_sitelibdir_noarch/%oname/%name.service \
 # Create empty files for %%ghost:
 mkdir -p %buildroot%_localstatedir/icinga2/certs
 touch %buildroot%_localstatedir/icinga2/certs/icinga2-usersyncd.key
+touch %buildroot%_localstatedir/icinga2/certs/icinga2-usersyncd.req
 touch %buildroot%_localstatedir/icinga2/certs/icinga2-usersyncd.crt
 
 #check
@@ -73,6 +74,7 @@ touch %buildroot%_localstatedir/icinga2/certs/icinga2-usersyncd.crt
 %_man1dir/%name.1.*
 %_unitdir/%name.service
 %ghost /var/lib/icinga2/certs/icinga2-usersyncd.key
+%ghost /var/lib/icinga2/certs/icinga2-usersyncd.req
 %ghost /var/lib/icinga2/certs/icinga2-usersyncd.crt
 
 %files -n python3-module-%name

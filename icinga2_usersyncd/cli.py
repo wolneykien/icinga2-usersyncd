@@ -26,7 +26,7 @@ command-line interface to the daemon and provides the entry-point
 
 from .daemon import Daemon
 from .logging import logger, logging
-from .constants import VERSION_INFO, CONFIG, DEFAULT_QUEUE, DEFAULT_PREFIX, DEFAULT_TEMPLATES, DEFAULT_DELAY
+from .constants import VERSION_INFO, CONFIG, DEFAULT_QUEUE, DEFAULT_PREFIX, DEFAULT_TEMPLATES, DEFAULT_DELAY, SETUP_SCRIPT
 import sys
 import signal
 from argparse import ArgumentParser
@@ -148,7 +148,7 @@ Written by Paul Wolneykien.
     logger.setLevel(args.log_level or logging.INFO)
 
     if args.do_setup:
-        sys.exit(os.system("/usr/sbin/icinga2 pki new-cert --cn icinga2-usersyncd --key /var/lib/icinga2/certs/icinga2-usersyncd.key --cert /var/lib/icinga2/certs/icinga2-usersyncd.crt"))
+        sys.exit(os.system(SETUP_SCRIPT))
 
     try:
         Daemon(config_file = args.config,

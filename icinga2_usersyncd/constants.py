@@ -34,3 +34,4 @@ DEFAULT_PREFIX = "host-"
 DEFAULT_TEMPLATES = [ "usersync" ]
 DEFAULT_QUEUE = "icinga2-usersyncd"
 DEFAULT_DELAY = 1
+SETUP_SCRIPT = "/usr/sbin/icinga2 pki new-cert --cn icinga2-usersyncd --key /var/lib/icinga2/certs/icinga2-usersyncd.key --cert /var/lib/icinga2/certs/icinga2-usersyncd.crt && /usr/sbin/icinga2 pki sign-csr --csr /var/lib/icinga2/certs/icinga2-usersyncd.req --cert /var/lib/icinga2/certs/icinga2-usersyncd.crt"
