@@ -33,6 +33,8 @@ from .constants import CONFIG_SECTION, DEFAULT_DELAY
 from multiprocessing import Process
 import time
 from configparser import ConfigParser, NoOptionError
+import warnings
+import urllib3
 
 # from importlib.resources import files
 #
@@ -132,6 +134,9 @@ class Daemon:
             key = certificate,
             ca_certificate = ca_certificate
         )
+
+        if not self.client.ca_certificate:
+            warnings.simplefilter("ignore", category=urllib3.exceptions.InsecureRequestWarning)
 
         logger.debug("Initializing the daemon...")
         if config_file:
