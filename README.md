@@ -61,7 +61,10 @@ Options:
 
 * `-t DELAY`, `--delay DELAY` a number of seconds to wait between
     connection attempts (the default is either from the config or 1
-    if omitted).
+    if omitted);
+
+* `--setup` generate certificate for CN "icinga2-usersyncd" and exit
+  (the certificate is placed in /var/lib/icinga2/certs/).
 
 BUGS
 ----
