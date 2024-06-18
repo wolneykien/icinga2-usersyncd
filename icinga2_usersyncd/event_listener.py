@@ -70,6 +70,10 @@ class EventListener():
         Opens the request to the event stream.
         """
 
+        logger.debug("[EventListener] Requesting inistal host list...")
+        hosts = self.client.objects.list("Host", filters = self.filter)
+        self.host_names = set([h["name"] for h in hosts])
+
         def subscribe() -> Generator:
             return self.client.events.subscribe(
                 ['ObjectCreated', 'ObjectDeleted'],
@@ -98,16 +102,23 @@ class EventListener():
                         continue
                     if e["type"] == "ObjectCreated":
                         try:
-                            self.userManager.add_api_user(
-                                e["object_name"]
-                            )
+                            host = self.client.objects.list(
+                                "Host",
+                                name = e["object_name"],
+                                filters = self.filter
+                            )[0]
+                            if host:
+                                self.host_names.add(host["name"])
+                                self.userManager.add_api_user(host["name"])
                         except Exception as ex:
                             logger.error(f"[EventListener] Error while trying to add ApiUser \"%s\": %s." % (e["object_name"], str(ex)))
                     elif e["type"] == "ObjectDeleted":
                         try:
-                            self.userManager.del_api_user(
-                                e["object_name"]
-                            )
+                            if e["object_name"] in self.host_names:
+                                self.host_names.remove(e["object_name"])
+                                self.userManager.del_api_user(
+                                    e["object_name"]
+                                )
                         except Exception as ex:
                             logger.error(f"[EventListener] Error while trying to delete ApiUser \"%s\": %s." % (e["object_name"], str(ex)))
             except Exception as ex:
