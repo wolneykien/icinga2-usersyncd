@@ -31,6 +31,7 @@ from threading import Lock
 from .logging import logger
 from .apiuser import ApiUserManager
 from .constants import DEFAULT_QUEUE
+import json
 
 class EventListener():
     """
@@ -91,7 +92,8 @@ class EventListener():
             if not self.stream:
                 raise RuntimeError("Not connected!")
             try:
-                for e in self.stream:
+                for str_e in self.stream:
+                    e = json.loads(str_e)
                     if e["type"] == "ObjectCreated":
                         try:
                             self.userManager.add_api_user(
