@@ -9,6 +9,12 @@ icinga2-usersyncd [-h] [-V] [-v] [-q] [-c CONFIG] [--no-config]
                   [-L URL] [-u USERNAME] [-p PASSWORD] [-C CERT]
                   [-K KEY] [-A CA_CERT] [-Q QUEUE] [-P PREFIX]
                   [-T TEMPLATES] [-f FILTER] [-t DELAY]
+
+icinga2-usersyncd -h | --help
+
+icinga2-usersyncd -V | --version
+
+icinga2-usersyncd --setup
 ```
 
 DESCRIPTION

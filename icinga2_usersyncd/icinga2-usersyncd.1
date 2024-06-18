@@ -3,10 +3,16 @@
 icinga2-usersyncd \- a daemon to synchronize ApiUser entries with Host agents on an Icinga 2 instance
 .SH SYNOPSIS
 .nf
-icinga2-usersyncd [-h] [-V] [-v] [-q] [-c CONFIG] [--no-config]
+icinga2-usersyncd [-v] [-q] [-c CONFIG] [--no-config]
                   [-L URL] [-u USERNAME] [-p PASSWORD] [-C CERT]
                   [-K KEY] [-A CA_CERT] [-Q QUEUE] [-P PREFIX]
                   [-T TEMPLATES] [-f FILTER] [-t DELAY]
+
+icinga2-usersyncd -h | --help
+
+icinga2-usersyncd -V | --version
+
+icinga2-usersyncd --setup
 .fi
 .SH DESCRIPTION
 icinga2\-usersyncd is a daemon to synchronize ApiUser entries with
