@@ -74,7 +74,7 @@ class EventListener():
             return self.client.events.subscribe(
                 ['ObjectCreated', 'ObjectDeleted'],
                 self.queue,
-                self.filter
+                "event.object_type == \"Host\""
             )
 
         with self.lock:
@@ -94,6 +94,8 @@ class EventListener():
             try:
                 for str_e in self.stream:
                     e = json.loads(str_e)
+                    if e["object_type"] != "Host":
+                        continue
                     if e["type"] == "ObjectCreated":
                         try:
                             self.userManager.add_api_user(
