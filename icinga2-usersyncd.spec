@@ -2,7 +2,7 @@
 %define oname icinga2_usersyncd
 
 Name: icinga2-usersyncd
-Version: 0.1.1
+Version: 0.1.2
 Release: alt1
 
 Group: Monitoring
@@ -83,6 +83,14 @@ touch %buildroot%_localstatedir/icinga2/certs/icinga2-usersyncd.crt
 %python3_sitelibdir_noarch/%oname-%version.dist-info
 
 %changelog
+* Tue Jun 18 2024 Paul Wolneykien <manowar@altlinux.org> 0.1.2-alt1
+- Package the README.
+- Added "SETUP" section to the README.
+- Improved CLI synopsis in README and manpage.
+- Fixed error message in EventListener.
+- Fixed EventListener: Add filter matching Host events.
+- Fixed EventListener: Explicitly convert events to objects.
+
 * Tue Jun 18 2024 Paul Wolneykien <manowar@altlinux.org> 0.1.1-alt1
 - Ignore urllib3.exceptions.InsecureRequestWarning if ca_certificate
   is not set.
