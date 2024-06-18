@@ -104,8 +104,7 @@ class EventListener():
                         try:
                             host = self.client.objects.list(
                                 "Host",
-                                name = e["object_name"],
-                                filters = self.filter
+                                filters = (f"host.name == \"%s\"" % e["object_name"]) + (f" && (%s)" % self.filter) if self.filter else ""
                             )[0]
                             if host:
                                 self.host_names.add(host["name"])
