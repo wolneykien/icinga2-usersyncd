@@ -110,7 +110,7 @@ class EventListener():
                                 self.host_names.add(hosts[0]["name"])
                                 self.userManager.add_api_user(hosts[0]["name"])
                         except Exception as ex:
-                            logger.error(f"[EventListener] Error while trying to add ApiUser \"%s\": %s." % (e["object_name"], str(ex)))
+                            logger.error(f"[EventListener] Error while trying to add ApiUser for host \"%s\": %s." % (e["object_name"], str(ex)))
                     elif e["type"] == "ObjectDeleted":
                         try:
                             if e["object_name"] in self.host_names:
@@ -119,7 +119,7 @@ class EventListener():
                                     e["object_name"]
                                 )
                         except Exception as ex:
-                            logger.error(f"[EventListener] Error while trying to delete ApiUser \"%s\": %s." % (e["object_name"], str(ex)))
+                            logger.error(f"[EventListener] Error while trying to delete ApiUser for host \"%s\": %s." % (e["object_name"], str(ex)))
             except Exception as ex:
                 logger.error(f"[EventListener] Error while processing the stream: %s." % str(ex))
             finally:
