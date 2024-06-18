@@ -102,13 +102,13 @@ class EventListener():
                         continue
                     if e["type"] == "ObjectCreated":
                         try:
-                            host = self.client.objects.list(
+                            hosts = self.client.objects.list(
                                 "Host",
                                 filters = (f"host.name == \"%s\"" % e["object_name"]) + (f" && (%s)" % self.filter) if self.filter else ""
-                            )[0]
-                            if host:
-                                self.host_names.add(host["name"])
-                                self.userManager.add_api_user(host["name"])
+                            )
+                            if hosts:
+                                self.host_names.add(hosts[0]["name"])
+                                self.userManager.add_api_user(hosts[0]["name"])
                         except Exception as ex:
                             logger.error(f"[EventListener] Error while trying to add ApiUser \"%s\": %s." % (e["object_name"], str(ex)))
                     elif e["type"] == "ObjectDeleted":
