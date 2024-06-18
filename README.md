@@ -81,3 +81,10 @@ SEE ALSO
 --------
 
 `icinga2(8)`
+
+SETUP
+-----
+
+Run `icinga2-usersyncd --setup` to generate a client certificate for
+"icinga2-usersyncd" API user and restart Icinga 2 in order to read
+new API user definition and templates.
