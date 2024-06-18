@@ -68,6 +68,7 @@ touch %buildroot%_localstatedir/icinga2/certs/icinga2-usersyncd.crt
 #pyproject_run_pytest
 
 %files
+%doc README.md
 %_bindir/%name
 %config(noreplace) %_sysconfdir/icinga2/conf.d/%name.conf
 %config(noreplace) %_sysconfdir/sysconfig/%name
