@@ -25,7 +25,7 @@ constants used across the project.
 
 VERSION_INFO = {
     'PROG': "icinga2-usersyncd",
-    'VERSION': "0.1.1",
+    'VERSION': "0.1.2",
     'YEAR': "2024"
 }
 CONFIG_SECTION = "daemon"
